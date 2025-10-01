@@ -225,6 +225,5 @@ WHERE no_rooms = 3;
   * Summerhouses and Villas present **value for money** on a sqm basis.
   * Urban apartments, while expensive per sqm, may be ideal for long-term appreciation.
 
-```
 
 
