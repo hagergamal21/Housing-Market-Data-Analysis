@@ -57,7 +57,7 @@ Created a stage pointing to the S3 bucket:
 ```
 CREATE OR REPLACE STAGE housing_stage
 URL = 's3://bucket-name/housing-data/'
-STORAGE_INTEGRATION = aws_integration;
+STORAGE_INTEGRATION = now_integration;
 ```
 
 Copied the data into the Snowflake table:
