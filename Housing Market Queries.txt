@@ -1,0 +1,62 @@
+
+//description Integration Object
+desc integration S3_Integration;
+
+create database Housing;
+
+create schema Housing_Data;
+
+create table Housing_Dataset (
+    date DATE,
+    quarter STRING,
+    house_id NUMBER(38,0),
+    house_type STRING,
+    sales_type STRING,
+    year_build NUMBER(4,0),
+    purchase_price NUMBER(18,0),
+    pct_change_offer_purchase NUMBER(5,0),
+    no_rooms NUMBER(5,0),
+    sqm NUMBER(10,0),
+    sqm_price NUMBER(18,2),
+    address STRING,
+    zip_code NUMBER(10,0),
+    city STRING,
+    area STRING,
+    region STRING,
+    nom_interest_rate FLOAT,
+    dk_ann_infl_rate FLOAT,
+    yield_on_mortgage_credit_bonds FLOAT
+);
+
+select * from HOUSING_DATASET;
+
+create stage Housing.Housing_Data.Housing_stage
+url = 's3://csv.test.file.hg/Housing'
+storage_integration = S3_Integration
+
+copy into Housing_Dataset 
+from @Housing_stage
+file_format = (type=csv field_delimiter=',' skip_header=1 )
+on_error = 'continue'
+
+select * from HOUSING_DATASET;
+
+CREATE TABLE Housing.Housing_Data.Housing_Dataset_Copy AS
+SELECT *
+FROM HOUSING.Housing_Data.HOUSING_DATASET;
+
+// DROP TABLE Housing.Housing_Data.Housing_Dataset_Ccopy;
+
+SELECT * FROM Housing_Dataset_Copy
+LIMIT 1000;
+
+
+SELECT SALES_TYPE,AVG(PURCHASE_PRICE) FROM Housing_Dataset_Copy
+GROUP BY SALES_TYPE;
+
+UPDATE Housing_Dataset_Copy 
+SET SQM = 100
+WHERE NO_ROOMS = 3;
+
+SELECT DISTINCT SQM FROM Housing_Dataset_Copy
+WHERE NO_ROOMS = 3;
